@@ -5,7 +5,7 @@ Este é um projeto de renderização 3D escrito em Python que utiliza biblioteca
 ## Funcionalidades Principais
 
 - **Criação de Objetos 3D:**
-    - Caixa, Cone, Tronco de Cone e Linha.
+    - Cubo, cano e toro.
     - Definição de vértices, arestas e malhas triangulares.
 
 - **Transformações Geométricas:**
