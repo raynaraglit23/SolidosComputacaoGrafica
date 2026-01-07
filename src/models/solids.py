@@ -240,168 +240,168 @@ class CanoCurvadoHermite:
 
         return vertices, triangles
 
-class Caixa:
-    def __init__(self, lado, altura, espessura=0.1, density=2):
-        self.vertices, self.topo = Caixa.caixa_malha(lado, altura, espessura, density=density)
+# class Caixa:
+#     def __init__(self, lado, altura, espessura=0.1, density=2):
+#         self.vertices, self.topo = Caixa.caixa_malha(lado, altura, espessura, density=density)
 
-    @staticmethod
-    def create_caixa(lado, altura, espessura=0.1):
-        vertices = [
-            [0, 0, 0], [lado, 0, 0], [lado, lado, 0], [0, lado, 0],
-            [0, 0, altura], [lado, 0, altura], [lado, lado, altura], [0, lado, altura],
-            [espessura, espessura, espessura], [lado - espessura, espessura, espessura],
-            [lado - espessura, lado - espessura, espessura], [espessura, lado - espessura, espessura],
-            [espessura, espessura, altura], [lado - espessura, espessura, altura],
-            [lado - espessura, lado - espessura, altura], [espessura, lado - espessura, altura]
-        ]
-        edges = [
-            (0, 1), (1, 2), (2, 3), (3, 0),
-            (8, 9), (9, 10), (10, 11), (11, 8),
-            (0, 4), (1, 5), (2, 6), (3, 7),
-            (8, 12), (9, 13), (10, 14), (11, 15)
-        ]
-        return vertices, edges
+#     @staticmethod
+#     def create_caixa(lado, altura, espessura=0.1):
+#         vertices = [
+#             [0, 0, 0], [lado, 0, 0], [lado, lado, 0], [0, lado, 0],
+#             [0, 0, altura], [lado, 0, altura], [lado, lado, altura], [0, lado, altura],
+#             [espessura, espessura, espessura], [lado - espessura, espessura, espessura],
+#             [lado - espessura, lado - espessura, espessura], [espessura, lado - espessura, espessura],
+#             [espessura, espessura, altura], [lado - espessura, espessura, altura],
+#             [lado - espessura, lado - espessura, altura], [espessura, lado - espessura, altura]
+#         ]
+#         edges = [
+#             (0, 1), (1, 2), (2, 3), (3, 0),
+#             (8, 9), (9, 10), (10, 11), (11, 8),
+#             (0, 4), (1, 5), (2, 6), (3, 7),
+#             (8, 12), (9, 13), (10, 14), (11, 15)
+#         ]
+#         return vertices, edges
 
-    @staticmethod
-    def caixa_malha(lado, altura, espessura=0.1, density=2):
-        vertices, _ = Caixa.create_caixa(lado, altura, espessura)
-        triangles = [
-            [0, 2, 1], [0, 3, 2],
-            [0, 5, 1], [0, 4, 5],
-            [1, 6, 2], [1, 5, 6],
-            [2, 7, 3], [2, 6, 7],
-            [3, 4, 0], [3, 7, 4],
-            [8, 10, 9], [8, 11, 10],
-            [8, 13, 9], [8, 12, 13],
-            [9, 14, 10], [9, 13, 14],
-            [10, 15, 11], [10, 14, 15],
-            [11, 12, 8], [11, 15, 12],
-            [4, 13, 5], [4, 12, 13],
-            [5, 14, 6], [5, 13, 14],
-            [6, 15, 7], [6, 14, 15],
-            [7, 12, 4], [7, 15, 12]
-        ]
+#     @staticmethod
+#     def caixa_malha(lado, altura, espessura=0.1, density=2):
+#         vertices, _ = Caixa.create_caixa(lado, altura, espessura)
+#         triangles = [
+#             [0, 2, 1], [0, 3, 2],
+#             [0, 5, 1], [0, 4, 5],
+#             [1, 6, 2], [1, 5, 6],
+#             [2, 7, 3], [2, 6, 7],
+#             [3, 4, 0], [3, 7, 4],
+#             [8, 10, 9], [8, 11, 10],
+#             [8, 13, 9], [8, 12, 13],
+#             [9, 14, 10], [9, 13, 14],
+#             [10, 15, 11], [10, 14, 15],
+#             [11, 12, 8], [11, 15, 12],
+#             [4, 13, 5], [4, 12, 13],
+#             [5, 14, 6], [5, 13, 14],
+#             [6, 15, 7], [6, 14, 15],
+#             [7, 12, 4], [7, 15, 12]
+#         ]
         
-        for _ in range(density):
-            vertices, triangles = Caixa.subdivide(vertices, triangles)
-        return vertices, triangles
+#         for _ in range(density):
+#             vertices, triangles = Caixa.subdivide(vertices, triangles)
+#         return vertices, triangles
 
-    @staticmethod
-    def subdivide(vertices, triangles):
-        new_vertices = list(vertices)
-        edge_midpoints = {}
-        new_triangles = []
+#     @staticmethod
+#     def subdivide(vertices, triangles):
+#         new_vertices = list(vertices)
+#         edge_midpoints = {}
+#         new_triangles = []
 
-        def get_midpoint(a_idx, b_idx):
-            key = tuple(sorted((a_idx, b_idx)))
-            if key not in edge_midpoints:
+#         def get_midpoint(a_idx, b_idx):
+#             key = tuple(sorted((a_idx, b_idx)))
+#             if key not in edge_midpoints:
                 
-                a = new_vertices[a_idx]
-                b = new_vertices[b_idx]
-                midpoint = [
-                    (a[0] + b[0]) / 2,
-                    (a[1] + b[1]) / 2,
-                    (a[2] + b[2]) / 2
-                ]
-                edge_midpoints[key] = len(new_vertices)
-                new_vertices.append(midpoint)
-            return edge_midpoints[key]
+#                 a = new_vertices[a_idx]
+#                 b = new_vertices[b_idx]
+#                 midpoint = [
+#                     (a[0] + b[0]) / 2,
+#                     (a[1] + b[1]) / 2,
+#                     (a[2] + b[2]) / 2
+#                 ]
+#                 edge_midpoints[key] = len(new_vertices)
+#                 new_vertices.append(midpoint)
+#             return edge_midpoints[key]
 
-        for tri in triangles:
-            a, b, c = tri
+#         for tri in triangles:
+#             a, b, c = tri
 
-            m_ab = get_midpoint(a, b)
-            m_bc = get_midpoint(b, c)
-            m_ca = get_midpoint(c, a)
-
-
-            new_triangles.append([a, m_ab, m_ca])
-            new_triangles.append([m_ab, b, m_bc])
-            new_triangles.append([m_ca, m_bc, c])
-            new_triangles.append([m_ab, m_bc, m_ca])
-
-        return new_vertices, new_triangles
+#             m_ab = get_midpoint(a, b)
+#             m_bc = get_midpoint(b, c)
+#             m_ca = get_midpoint(c, a)
 
 
-class Cone:
-    def __init__(self, raio, altura, n=32):
-        self.vertices, self.topo = Cone.cone_malha(raio, altura, n)
+#             new_triangles.append([a, m_ab, m_ca])
+#             new_triangles.append([m_ab, b, m_bc])
+#             new_triangles.append([m_ca, m_bc, c])
+#             new_triangles.append([m_ab, m_bc, m_ca])
 
-    @staticmethod
-    def create_cone(raio, altura, n=32):
-        vertices = [[0, 0, altura], [0, 0, 0]]
-        for i in range(n):
-            theta = 2 * math.pi * i / n
-            vertices.append([raio * math.cos(theta), raio * math.sin(theta), 0])
-        edges = []
-        for i in range(n):
-            edges.append((i + 2, (i + 1) % n + 2))
-        for i in range(n):
-            edges.append((0, i + 2))
-        return vertices, edges
-
-    @staticmethod
-    def cone_malha(raio, altura, n=32):
-        vertices, _ = Cone.create_cone(raio, altura, n)
-        triangles = []
-        for i in range(n):
-            next_i = (i + 1) % n
-            triangles.append([1, i + 2, next_i + 2])
-        for i in range(n):
-            next_i = (i + 1) % n
-            triangles.append([0, i + 2, next_i + 2])
-        return vertices, triangles
+#         return new_vertices, new_triangles
 
 
-class TroncoCone:
-    def __init__(self, r1, r2, h, n=32):
-        self.vertices, self.topo = TroncoCone.tronco_malha(r1, r2, h, n)
+# class Cone:
+#     def __init__(self, raio, altura, n=32):
+#         self.vertices, self.topo = Cone.cone_malha(raio, altura, n)
 
-    @staticmethod
-    def create_tronco_cone(r1, r2, h, n=32):
-        vertices = [[0, 0, h], [0, 0, 0]]
-        for i in range(n):
-            theta = 2 * math.pi * i / n
-            vertices.append([r1 * math.cos(theta), r1 * math.sin(theta), h])
-        for i in range(n):
-            theta = 2 * math.pi * i / n
-            vertices.append([r2 * math.cos(theta), r2 * math.sin(theta), 0])
-        edges = []
-        for i in range(n):
-            edges.append((i, (i + 1) % n))
-        for i in range(n, 2 * n):
-            edges.append((i, n + (i + 1 - n) % n))
-        for i in range(n):
-            edges.append((i, i + n))
-        return vertices, edges
+#     @staticmethod
+#     def create_cone(raio, altura, n=32):
+#         vertices = [[0, 0, altura], [0, 0, 0]]
+#         for i in range(n):
+#             theta = 2 * math.pi * i / n
+#             vertices.append([raio * math.cos(theta), raio * math.sin(theta), 0])
+#         edges = []
+#         for i in range(n):
+#             edges.append((i + 2, (i + 1) % n + 2))
+#         for i in range(n):
+#             edges.append((0, i + 2))
+#         return vertices, edges
 
-    @staticmethod
-    def tronco_malha(r1, r2, h, n=32):
-        vertices, _ = TroncoCone.create_tronco_cone(r1, r2, h, n)
-        triangles = []
-
-        for i in range(n):
-            next_i = (i + 1) % n
-            triangles.append([0, 2 + i, 2 + next_i])
-            triangles.append([1, n + 2 + i, n + 2 + next_i])
-
-        for i in range(n):
-            next_i = (i + 1) % n
-            top_i = 2 + i
-            base_i = n + 2 + i
-            top_next = 2 + next_i
-            base_next = n + 2 + next_i
-            triangles.append([top_i, base_i, base_next])
-            triangles.append([top_i, base_next, top_next])
-        return vertices, triangles
+#     @staticmethod
+#     def cone_malha(raio, altura, n=32):
+#         vertices, _ = Cone.create_cone(raio, altura, n)
+#         triangles = []
+#         for i in range(n):
+#             next_i = (i + 1) % n
+#             triangles.append([1, i + 2, next_i + 2])
+#         for i in range(n):
+#             next_i = (i + 1) % n
+#             triangles.append([0, i + 2, next_i + 2])
+#         return vertices, triangles
 
 
-class Linha:
-    def __init__(self):
-        self.vertices, self.topo = Linha.create_linha()
+# class TroncoCone:
+#     def __init__(self, r1, r2, h, n=32):
+#         self.vertices, self.topo = TroncoCone.tronco_malha(r1, r2, h, n)
 
-    @staticmethod
-    def create_linha():
-        vertices = [[0, 0, 0], [0, 0, 3]]
-        edges = [(0, 1)]
-        return vertices, edges
+#     @staticmethod
+#     def create_tronco_cone(r1, r2, h, n=32):
+#         vertices = [[0, 0, h], [0, 0, 0]]
+#         for i in range(n):
+#             theta = 2 * math.pi * i / n
+#             vertices.append([r1 * math.cos(theta), r1 * math.sin(theta), h])
+#         for i in range(n):
+#             theta = 2 * math.pi * i / n
+#             vertices.append([r2 * math.cos(theta), r2 * math.sin(theta), 0])
+#         edges = []
+#         for i in range(n):
+#             edges.append((i, (i + 1) % n))
+#         for i in range(n, 2 * n):
+#             edges.append((i, n + (i + 1 - n) % n))
+#         for i in range(n):
+#             edges.append((i, i + n))
+#         return vertices, edges
+
+#     @staticmethod
+#     def tronco_malha(r1, r2, h, n=32):
+#         vertices, _ = TroncoCone.create_tronco_cone(r1, r2, h, n)
+#         triangles = []
+
+#         for i in range(n):
+#             next_i = (i + 1) % n
+#             triangles.append([0, 2 + i, 2 + next_i])
+#             triangles.append([1, n + 2 + i, n + 2 + next_i])
+
+#         for i in range(n):
+#             next_i = (i + 1) % n
+#             top_i = 2 + i
+#             base_i = n + 2 + i
+#             top_next = 2 + next_i
+#             base_next = n + 2 + next_i
+#             triangles.append([top_i, base_i, base_next])
+#             triangles.append([top_i, base_next, top_next])
+#         return vertices, triangles
+
+
+# class Linha:
+#     def __init__(self):
+#         self.vertices, self.topo = Linha.create_linha()
+
+#     @staticmethod
+#     def create_linha():
+#         vertices = [[0, 0, 0], [0, 0, 3]]
+#         edges = [(0, 1)]
+#         return vertices, edges
